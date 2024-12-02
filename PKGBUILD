@@ -16,14 +16,13 @@ _pymajver="${_pyver%.*}"
 _pyminver="${_pymajver#*.}"
 _pynextver="${_pymajver%.*}.$(( \
   ${_pyminver} + 1))"
-_pkg=evm-contracts-abi-get
+_pkg=pre-kirshor
 pkgname="${_pkg}-git"
-pkgver=0.0.0.0.0.0.0.0.0.0.0.1.1.1.1
-_aioetherscan_ver="0.9.5.3"
+pkgver=0.0.0.0.0.0.0.0.0.0.0.1
 _commit="e8654948a72b6d1db66a887ad9c9f7c1bb2ab9b3"
 pkgrel=1
 _pkgdesc=(
-  "Returns ABI of a smart contract on an EVM network."
+  "Pre-process text before further compression."
 )
 pkgdesc="${_pkgdesc[*]}"
 arch=(
@@ -31,14 +30,14 @@ arch=(
 )
 _http="https://github.com"
 _ns="themartiancompany"
-url="${_http}/${_ns}/${pkgname}"
+url="${_http}/${_ns}/${_pkg}"
 license=(
   AGPL3
 )
 depends=(
   "${_py}>=${_pymajver}"
   "${_py}<${_pynextver}"
-  "${_py}-aioetherscan>=${_aioetherscan_ver}"
+  "words"
 )
 _os="$( \
   uname \
@@ -54,6 +53,7 @@ optdepends=(
   )
 makedepends=(
   "${_py}-setuptools"
+  "cython"
 )
 checkdepends=(
   "shellcheck"
@@ -67,9 +67,10 @@ conflicts=(
   "${_py}-${_pkg}"
 )
 _url="${url}"
-_tag="master"
+_branch="master"
+_tag="${_branch}"
 _tag_name="branch"
-_tarname="${pkgname}-${_tag}"
+_tarname="${_pkg}-${_tag}"
 [[ "${_offline}" == "true" ]] && \
   _url="file://${HOME}/${_pkg}"
 if [[ "${_git}" == true ]]; then
@@ -81,10 +82,13 @@ if [[ "${_git}" == true ]]; then
 elif [[ "${_git}" == false ]]; then
   if [[ "${_tag_name}" == 'pkgver' ]]; then
     _src="${_tarname}.tar.gz::${_url}/archive/refs/tags/${_tag}.tar.gz"
-    _sum="d4f4179c6e4ce1702c5fe6af132669e8ec4d0378428f69518f2926b969663a91"
+    _sum="SKIP"
   elif [[ "${_tag_name}" == "commit" ]]; then
     _src="${_tarname}.zip::${_url}/archive/${_commit}.zip"
-    _sum='31ac0b8014076f8c7cafa1c92c311359dc7f6f931e17c0a718c406cae77272f7'
+    _sum='SKIP'
+  elif [[ "${_tag_name}" == "branch" ]]; then
+    _src="${_tarname}.zip::${_url}/archive/${_branch}.zip"
+    _sum='SKIP'
   fi
 fi
 source=(
